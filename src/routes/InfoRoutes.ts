@@ -4,7 +4,6 @@ import {verifyToken} from "../services/SecurityService";
 
 const infoRouter = express.Router()
 
-infoRouter
-    .get('/info', verifyToken, info)
+infoRouter.get('/', verifyToken, info)
 
 export default infoRouter
