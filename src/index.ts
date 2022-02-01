@@ -1,16 +1,21 @@
 import * as express from "express";
 import * as cors from 'cors'
-import "reflect-metadata";
-import {Request, Response} from "express";
-import {createConnection} from "typeorm";
-import ormconfig from "../ormconfig";
-import {User} from "./entity/User";
 import * as dotenv from 'dotenv'
+
+import "reflect-metadata";
+import {createConnection} from "typeorm";
+
+import authRouter from "./routes/AuthRoutes";
+import ormconfig from "../ormconfig";
+
+import {User} from "./entity/User";
+import {Token} from "./entity/Token";
+import infoRouter from "./routes/InfoRoutes";
 
 const PORT = 5050
 
+//connecting .env file
 dotenv.config()
-//console.log(process.env)
 
 // create typeorm connection
 createConnection({
@@ -20,11 +25,10 @@ createConnection({
     username: ormconfig.username,
     password: ormconfig.password,
     database: ormconfig.database,
-    entities: [User],
+    entities: [User, Token],
     synchronize: true,
     logging: false,
-}).then(async connection => {
-    const userRepository = connection.getRepository(User);
+}).then(async () => {
 
     // create and setup express app
     const app = express();
@@ -47,39 +51,11 @@ createConnection({
     app.use(express.json());
     app.use(cors(options));
 
-    // register routes
-    app.get("/", async function(req: Request, res: Response) {
-        res.json({message: 'This is a test node'})
-    })
-    app.get("/users", async function(req: Request, res: Response) {
-        const users = await userRepository.find();
-        res.json(users);
-    });
+    //API Routes
+    app.use('/', authRouter)
+    app.use('/', infoRouter)
 
-    app.get("/users/:id", async function(req: Request, res: Response) {
-        const results = await userRepository.findOne(req.params.id);
-        return res.send(results);
-    });
-
-    app.post("/users", async function(req: Request, res: Response) {
-        const user = await userRepository.create(req.body);
-        const results = await userRepository.save(user);
-        return res.send(results);
-    });
-
-    app.put("/users/:id", async function(req: Request, res: Response) {
-        const user = await userRepository.findOne(req.params.id);
-        userRepository.merge(user, req.body);
-        const results = await userRepository.save(user);
-        return res.send(results);
-    });
-
-    app.delete("/users/:id", async function(req: Request, res: Response) {
-        const results = await userRepository.delete(req.params.id);
-        return res.send(results);
-    });
-
-    // start express server
+    //start express server
     app.listen(PORT);
     console.log(`App is running on port ${PORT}...`)
 });
