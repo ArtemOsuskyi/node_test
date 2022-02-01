@@ -1,18 +1,21 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
+import {Token} from "./Token";
 
 @Entity()
 export class User {
 
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({})
     id: number;
 
     @Column()
-    firstName: string;
+    username: string;
 
     @Column()
-    lastName: string;
+    password: string
 
     @Column()
-    age: number;
+    id_type: string
 
+    @OneToMany(() => Token, token => token.owner, {onUpdate: "CASCADE"})
+    token: Token
 }

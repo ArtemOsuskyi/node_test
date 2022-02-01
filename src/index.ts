@@ -1,16 +1,22 @@
 import * as express from "express";
 import * as cors from 'cors'
+import * as dotenv from 'dotenv'
+
 import "reflect-metadata";
 import {Request, Response} from "express";
 import {createConnection} from "typeorm";
+
+import authRouter from "./routes/AuthRoutes";
 import ormconfig from "../ormconfig";
+
 import {User} from "./entity/User";
-import * as dotenv from 'dotenv'
+import {Token} from "./entity/Token";
+import infoRouter from "./routes/InfoRoutes";
 
 const PORT = 5050
 
+//connecting .env file
 dotenv.config()
-//console.log(process.env)
 
 // create typeorm connection
 createConnection({
@@ -20,7 +26,7 @@ createConnection({
     username: ormconfig.username,
     password: ormconfig.password,
     database: ormconfig.database,
-    entities: [User],
+    entities: [User, Token],
     synchronize: true,
     logging: false,
 }).then(async connection => {
@@ -47,10 +53,13 @@ createConnection({
     app.use(express.json());
     app.use(cors(options));
 
+    app.use('/', authRouter)
+    app.use('/', infoRouter)
     // register routes
-    app.get("/", async function(req: Request, res: Response) {
+    app.get("/", (req: Request, res: Response) => {
         res.json({message: 'This is a test node'})
     })
+
     app.get("/users", async function(req: Request, res: Response) {
         const users = await userRepository.find();
         res.json(users);
@@ -62,7 +71,7 @@ createConnection({
     });
 
     app.post("/users", async function(req: Request, res: Response) {
-        const user = await userRepository.create(req.body);
+        const user = userRepository.create(req.body);
         const results = await userRepository.save(user);
         return res.send(results);
     });
@@ -79,7 +88,7 @@ createConnection({
         return res.send(results);
     });
 
-    // start express server
+    //start express server
     app.listen(PORT);
     console.log(`App is running on port ${PORT}...`)
 });
