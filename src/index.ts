@@ -11,6 +11,7 @@ import ormconfig from "../ormconfig";
 import {User} from "./entity/User";
 import {Token} from "./entity/Token";
 import infoRouter from "./routes/InfoRoutes";
+import latencyRouter from "./routes/LatencyRoutes";
 
 const PORT = 5050
 
@@ -53,7 +54,8 @@ createConnection({
 
     //API Routes
     app.use('/', authRouter)
-    app.use('/', infoRouter)
+    app.use('/info', infoRouter)
+    app.use('/latency', latencyRouter)
 
     //start express server
     app.listen(PORT);
