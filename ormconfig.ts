@@ -1,8 +1,12 @@
 import * as path from "path";
+import {ConnectionOptions} from "typeorm";
+import {User} from "./src/entity/User";
+import {Token} from "./src/entity/Token";
 
 require('dotenv').config()
 
-export default {
+export const dbOptions: ConnectionOptions = {
+    type: 'postgres',
     host: process.env.HOST,
     port: Number(process.env.DB_PORT),
     username: process.env.DB_USERNAME,
@@ -11,7 +15,7 @@ export default {
     synchronize: true,
     migrationsRun: true,
     dropSchema: false,
-    entities: ["/src/entity/*.ts"],
+    entities: [User, Token],
     migrations: [],
     cli: {
         entitiesDir: path.join(__dirname, "..", "entities"),

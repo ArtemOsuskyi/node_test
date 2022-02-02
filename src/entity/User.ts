@@ -4,7 +4,7 @@ import {Token} from "./Token";
 @Entity()
 export class User {
 
-    @PrimaryGeneratedColumn({})
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
@@ -13,8 +13,8 @@ export class User {
     @Column()
     password: string
 
-    @Column()
-    id_type: string
+    @Column({name: "id_type"})
+    idType: string
 
     @OneToMany(() => Token, token => token.owner, {onUpdate: "CASCADE"})
     token: Token

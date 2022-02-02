@@ -10,10 +10,10 @@ export class Token {
     @Column()
     token: string;
 
-    @Column({type: "timestamp without time zone"})
-    expire_date: Date
+    @Column({name: "expire_date",type: "timestamp without time zone"})
+    expireDate: Date
 
-    @ManyToOne(() => User, {cascade: true})
+    @ManyToOne(() => User, user => user.token, {cascade: true})
     @JoinColumn({name:"owner_id"})
     owner: User
 }

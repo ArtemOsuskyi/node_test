@@ -1,12 +1,9 @@
 import {User} from "../entity/User";
 import {sign, verify} from "jsonwebtoken";
-import * as dotenv from 'dotenv'
 import {NextFunction, Request, Response} from "express";
 
-dotenv.config()
-
 const createToken = (user: User) => {
-    return sign({id: user.username, id_type: user.id_type}, process.env.ACCESS_TOKEN_SECRET, {
+    return sign({id: user.username, idType: user.idType}, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: "10m"
     })
 }

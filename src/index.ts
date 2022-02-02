@@ -1,35 +1,19 @@
 import * as express from "express";
 import * as cors from 'cors'
-import * as dotenv from 'dotenv'
 
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 
 import authRouter from "./routes/AuthRoutes";
-import ormconfig from "../ormconfig";
+import * as dbConfig from "../ormconfig";
 
-import {User} from "./entity/User";
-import {Token} from "./entity/Token";
 import infoRouter from "./routes/InfoRoutes";
 import latencyRouter from "./routes/LatencyRoutes";
 
 const PORT = 5050
 
-//connecting .env file
-dotenv.config()
-
 // create typeorm connection
-createConnection({
-    type: "postgres",
-    host: ormconfig.host,
-    port: ormconfig.port,
-    username: ormconfig.username,
-    password: ormconfig.password,
-    database: ormconfig.database,
-    entities: [User, Token],
-    synchronize: true,
-    logging: false,
-}).then(async () => {
+createConnection(dbConfig.dbOptions).then(async () => {
 
     // create and setup express app
     const app = express();
@@ -53,9 +37,9 @@ createConnection({
     app.use(cors(options));
 
     //API Routes
-    app.use('/', authRouter)
-    app.use('/info', infoRouter)
-    app.use('/latency', latencyRouter)
+    app.use('/', authRouter)  // /signin, /signup and /logout routes
+    app.use('/info', infoRouter)  // /info route
+    app.use('/latency', latencyRouter)  //  /latency route
 
     //start express server
     app.listen(PORT);
