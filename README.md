@@ -94,9 +94,11 @@ ROUTES:
         "result": "time_in_ms"
     }
 
-• /logout?all [GET] - removes bearer token <br>
-- ?all=true - remove ALL users bearer tokens
-- ?all=false - removes only current token
+• /logout?all [GET] - removes bearer token 
+- 
+    true - removes ALL bearer tokens
+    false - remove only current token
+   
 ```
 Input data:
     • Header 'Authorization': Bearer *TOKEN*
