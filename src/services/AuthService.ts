@@ -83,9 +83,13 @@ const signout = async (token: string) => {
     await tokenRepository.remove(removeToken)  //remove current token
 }
 
-const signoutAll = async () => {
-    const allTokens = await getRepository(Token).find()  //getting all tokens in DB
-    await getRepository(Token).remove(allTokens)  //removing them
+const signoutAll = async (token: string) => {
+    const tokenRepository = getRepository(Token)
+
+    await signout(token)  //remove current token
+
+    const removeToken = await tokenRepository.find()
+    await tokenRepository.remove(removeToken)
 }
 
 export class loginOrPasswordInvalid extends Error {
