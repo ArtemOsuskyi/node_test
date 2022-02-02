@@ -13,7 +13,7 @@ REST API server with Bearer token authentication written on TypeScript
     dotenv
 
 
-#API Routes:
+# API Routes
 
 HEADERS:
 
