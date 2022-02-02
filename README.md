@@ -52,13 +52,13 @@ ROUTES:
     }
     
     Output data:
-     • Success:
+        • Success:
         {
             "message": "Signup successful"
         }
          + access token in Token header
          After registration, field "idType" is set for either email or phone number
-    
+     
         • Failure:
         {
             "error": "IdTakenError",
@@ -77,14 +77,14 @@ ROUTES:
      • Header 'Authorization': Bearer *TOKEN*
 
     Output data:
-     • Success:
+        • Success:
         {
             "id": "bearer_token_id",
             "idType": "bearer_token_id_type"
         }
-
-    • Failure:
-       Status 403 Forbidden
+     
+        • Failure:
+        Status 403 Forbidden
 
 • /latency [GET] - returns service server latency for google.com
 -
